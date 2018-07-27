@@ -16,11 +16,20 @@ def get_fact():
 
     return facts[0].getText()
 
-
 @app.route('/')
 def home():
-    return "FILL ME!"
+    fact = get_fact()
 
+    url = 'http://hidden-journey-62459.herokuapp.com/piglatinize/'
+    payload = {'input_text': fact}
+
+    response = requests.post(url, data=payload, allow_redirects=False)
+
+    template = """
+    <a href={}>{}</a>
+    """.format(response.headers['location'], response.headers['location'])
+
+    return template
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 6787))
